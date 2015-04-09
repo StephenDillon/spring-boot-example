@@ -4,7 +4,7 @@
 .settings/
 build/
 target/
-/bin
+bin/
 gradle/
 *.springBeans
 .idea/
