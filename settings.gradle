@@ -1,0 +1,4 @@
+//This sets the application name as otherwise gradle will use the current folder
+rootProject.name='spring-boot-example'
+//Need a entry here to match each sub-project/folder you want to include
+include ':spring-boot-example-api',':spring-boot-example-server',':spring-boot-example-client'

@@ -1,0 +1,86 @@
+// The build script is how we define dependencies for build the project,
+// these are not included as dependencies for the final output, just used to build the application
+buildscript {
+	ext { springBootVersion = '1.2.2.RELEASE' }
+	repositories { mavenCentral() }
+	dependencies {
+		// The spring boot and management dependencies here help setup default versions for common dependencies
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath("io.spring.gradle:dependency-management-plugin:0.4.1.RELEASE")
+	}
+}
+
+// Anything in this block is applied to all sub projects
+subprojects{
+
+	group = 'yodes'
+
+	apply plugin: 'java'
+	apply plugin: 'maven'
+	apply plugin: 'eclipse'
+	apply plugin: 'idea'
+	apply plugin: 'io.spring.dependency-management'
+
+	sourceCompatibility = 1.8
+	targetCompatibility = 1.8
+
+	repositories {
+		mavenCentral()
+		jcenter()
+	}
+
+	eclipse {
+		classpath {
+			containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
+			containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
+		}
+	}
+	// We can run 'gradle wrapper' to download a version of gradle that we can build the application with.
+	// Using a wrapper is recommended so you don't need gradle installed in each environment and it helps keep
+	// builds stable by always having the same gradle version and makes upgrading much easier
+	task wrapper(type: Wrapper) { gradleVersion = '2.3' }
+
+	task sourcesJar(type: Jar, dependsOn: classes) {
+		classifier = 'sources'
+		from sourceSets.main.allSource
+	}
+
+	task javadocJar(type: Jar, dependsOn: javadoc) {
+		classifier = 'javadoc'
+		from javadoc.destinationDir
+	}
+
+	artifacts {
+		archives sourcesJar
+		archives javadocJar
+	}
+}
+
+project(':spring-boot-example-api'){
+	// I have these versions in each as a lot of the time you will want to push service improvements without
+	// changing your API. Generally API/Client changes are not as common and you might want to track these
+	version = '0.0.1-SNAPSHOT'
+}
+
+project(':spring-boot-example-client'){ version = '0.0.1-SNAPSHOT' }
+
+project(':spring-boot-example-server'){
+	apply plugin: 'spring-boot'
+	version = '0.0.1-SNAPSHOT'
+	springBoot { mainClass = "yodes.spring.boot.example.server.Main" }
+
+	dependencies {
+		compile project (":spring-boot-example-api")
+		// We use the client to integration test our application
+		testCompile project (":spring-boot-example-client")
+		compile("org.springframework.boot:spring-boot-starter-web")
+		compile("org.springframework.boot:spring-boot-starter-data-jpa")
+		compile("com.h2database:h2")
+		// Swagger allows us to document our rest api and gives us a easy way to exercise it
+		compile "com.mangofactory:swagger-springmvc:0.9.4"
+		// Not sure if we need this, must check
+		compile "org.ajar:swagger-spring-mvc-ui:0.4"
+		testCompile("org.springframework.boot:spring-boot-starter-test")
+	}
+}
+
