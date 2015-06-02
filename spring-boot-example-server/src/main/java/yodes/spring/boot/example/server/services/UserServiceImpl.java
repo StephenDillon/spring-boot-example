@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import yodes.spring.boot.example.api.UserDto;
 import yodes.spring.boot.example.server.entities.UserEntity;
@@ -57,5 +58,18 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void delete(String id) {
 		userRepository.delete(id);
+	}
+
+	/**
+	 * capitalize the passed string
+	 * <p>
+	 * We only have this to show a example of testing some logic
+	 * 
+	 * @param userName
+	 *            to modify
+	 * @return updated string
+	 */
+	protected String capitalizeString(String userName) {
+		return StringUtils.capitalize(userName);
 	}
 }

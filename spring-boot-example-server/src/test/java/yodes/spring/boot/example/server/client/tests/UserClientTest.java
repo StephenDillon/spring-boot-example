@@ -12,6 +12,10 @@ import yodes.spring.boot.example.server.TestSetup;
 
 /**
  * Test our client and service by starting up our service and using the client to send HTTP requests at our controller
+ * <p>
+ * We want to make sure each test can run independently of the others are the order is not guaranteed and each test
+ * should pass on its own (or a failure in a previous one cause another test to fail). To do this you shouldn't rely on
+ * any previous tests and try to avoid any duplicate calls
  */
 public class UserClientTest extends TestSetup {
 
@@ -39,31 +43,47 @@ public class UserClientTest extends TestSetup {
 
 	@Test
 	public void testFindById() {
-		// TODO Auto-generated method stub
+		UserDto myNewUser = userClient.create(createUserDto("Test FindById user"));
+		TestCase.assertNotNull(myNewUser.getId());
+		UserDto retrievedUser = userClient.findById(myNewUser.getId());
+		TestCase.assertNotNull(retrievedUser);
+		TestCase.assertEquals("Test FindById user", retrievedUser.getName());
 	}
 
 	@Test
 	public void testCreate() {
-		// TODO Auto-generated method stub
+		UserDto myNewUser = userClient.create(createUserDto("Test Create user"));
+		TestCase.assertNotNull(myNewUser);
+		TestCase.assertNotNull(myNewUser.getId());
 	}
 
 	@Test
 	public void testUpdate() {
-		// TODO Auto-generated method stub
+		UserDto myNewUser = userClient.create(createUserDto("Test Update user"));
+		TestCase.assertNotNull(myNewUser);
+		TestCase.assertNotNull(myNewUser.getId());
+		myNewUser.setName("Test Updated name");
+		UserDto updatedUser = userClient.update(myNewUser);
+		TestCase.assertNotNull(updatedUser);
+		TestCase.assertEquals(myNewUser.getId(), updatedUser.getId());
+		TestCase.assertEquals("Test Updated name", myNewUser.getName());
 	}
 
 	@Test
 	public void testDelete() {
-		// TODO Auto-generated method stub
-
+		UserDto myNewUser = userClient.create(createUserDto("Test Delete user"));
+		TestCase.assertNotNull(myNewUser);
+		TestCase.assertNotNull(myNewUser.getId());
+		userClient.delete(myNewUser.getId());
+		TestCase.assertNull(userClient.findById(myNewUser.getId()));
 	}
 
 	/**
-	 * Create a user dto with the name set
+	 * Create a user dto object with the name set but no ID. The server will set this for us
 	 * 
 	 * @param name
 	 *            to set
-	 * @return UserDto
+	 * @return UserDto with name set
 	 */
 	private UserDto createUserDto(String name) {
 		UserDto userDto = new UserDto();
