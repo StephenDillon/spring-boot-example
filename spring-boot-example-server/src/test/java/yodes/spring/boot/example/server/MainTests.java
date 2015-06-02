@@ -1,20 +1,23 @@
 package yodes.spring.boot.example.server;
 
+import junit.framework.TestCase;
+
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import yodes.spring.boot.example.server.Main;
+import yodes.spring.boot.example.server.controllers.UserController;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Main.class)
-@WebAppConfiguration
-public class MainTests {
+/**
+ * This tests that your application can startup and all your contexts are setup correctly
+ */
+public class MainTests extends TestSetup {
+
+	@Autowired
+	private UserController userController;
 
 	@Test
 	public void contextLoads() {
+		TestCase.assertNotNull(userController);
 	}
 
 }

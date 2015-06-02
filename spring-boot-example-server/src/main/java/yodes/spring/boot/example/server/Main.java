@@ -6,8 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.mangofactory.swagger.plugin.EnableSwagger;
 
 /**
- * This is the Main class that loads your application and configures how your
- * application is ran
+ * This is the Main class that loads your application and configures how your application runs
  */
 @SpringBootApplication
 @EnableSwagger

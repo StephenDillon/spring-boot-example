@@ -62,7 +62,13 @@ project(':spring-boot-example-api'){
 	version = '0.0.1-SNAPSHOT'
 }
 
-project(':spring-boot-example-client'){ version = '0.0.1-SNAPSHOT' }
+project(':spring-boot-example-client'){
+	version = '0.0.1-SNAPSHOT'
+	dependencies {
+		compile project (":spring-boot-example-api")
+		compile("org.springframework:spring-web:4.1.5.RELEASE")
+	}
+}
 
 project(':spring-boot-example-server'){
 	apply plugin: 'spring-boot'
@@ -71,7 +77,8 @@ project(':spring-boot-example-server'){
 
 	dependencies {
 		compile project (":spring-boot-example-api")
-		// We use the client to integration test our application
+		// We use the client to integration test our application,
+		// alternatively if we dont have/want a client we could use spring-mvc-test
 		testCompile project (":spring-boot-example-client")
 		compile("org.springframework.boot:spring-boot-starter-web")
 		compile("org.springframework.boot:spring-boot-starter-data-jpa")

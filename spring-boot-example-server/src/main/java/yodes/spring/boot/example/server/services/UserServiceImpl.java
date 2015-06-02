@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import yodes.spring.boot.example.api.UserDto;
 import yodes.spring.boot.example.server.entities.UserEntity;
@@ -11,6 +12,10 @@ import yodes.spring.boot.example.server.repositories.UserRepository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * A implementation of the {@link UserService} that uses the {@link UserRepository} to store and retrieve information
+ */
+@Service
 public class UserServiceImpl implements UserService {
 
 	@Autowired
@@ -37,16 +42,14 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDto create(UserDto userDto) {
-		UserEntity userEntity = objectMapper.convertValue(userDto,
-				UserEntity.class);
+		UserEntity userEntity = objectMapper.convertValue(userDto, UserEntity.class);
 		userEntity = userRepository.save(userEntity);
 		return objectMapper.convertValue(userEntity, UserDto.class);
 	}
 
 	@Override
 	public UserDto update(UserDto userDto) {
-		UserEntity userEntity = objectMapper.convertValue(userDto,
-				UserEntity.class);
+		UserEntity userEntity = objectMapper.convertValue(userDto, UserEntity.class);
 		userEntity = userRepository.save(userEntity);
 		return objectMapper.convertValue(userEntity, UserDto.class);
 	}
