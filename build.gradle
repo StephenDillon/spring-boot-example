@@ -35,10 +35,6 @@ subprojects{
 			containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
 		}
 	}
-	// We can run 'gradle wrapper' to download a version of gradle that we can build the application with.
-	// Using a wrapper is recommended so you don't need gradle installed in each environment and it helps keep
-	// builds stable by always having the same gradle version and makes upgrading much easier
-	task wrapper(type: Wrapper) { gradleVersion = '2.3' }
 
 	task sourcesJar(type: Jar, dependsOn: classes) {
 		classifier = 'sources'
