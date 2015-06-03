@@ -10,6 +10,9 @@ buildscript {
 	}
 }
 
+// Set the gradle version so we can update to use a new wrapper
+task wrapper(type: Wrapper) { gradleVersion = '2.4' }
+
 // Anything in this block is applied to all sub projects
 subprojects{
 
